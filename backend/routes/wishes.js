@@ -1,30 +1,27 @@
-const express=require('express')
+const express = require('express')
+const {
+  getWishes, 
+  getWish, 
+  createWish, 
+  deleteWish, 
+  updateWish
+} = require('../controllers/wishController')
 
-const router=express.Router()
+const router = express.Router()
 
-//GET all wishes
-router.get('/',(req,res)=>{
-    res.json({mssg:'GET all wishes'})
-})
+// GET all wishes
+router.get('/', getWishes)
 
-//GET a single wish
-router.get('/:id',(req,res)=>{
-    res.json({mssg:'GET a single wish'})
-})
+// GET a single wish
+router.get('/:id', getWish)
 
-//POST a new wish
-router.get('/',(req,res)=>{
-    res.json({mssg:'POST a new wish'})
-})
+// POST a new wish
+router.post('/', createWish)
 
-//DELETE a wish
-router.delete('/:id',(req,res)=>{
-    res.json({mssg:'DELETE a wish'})
-})
+// DELETE a wish
+router.delete('/:id', deleteWish)
 
-//UPDATE a wish
-router.patch('/:id',(req,res)=>{
-    res.json({mssg:'UPDATE a wish'})
-})
+// UPDATE a wish
+router.patch('/:id', updateWish)
 
-module.exports=router
+module.exports = router
