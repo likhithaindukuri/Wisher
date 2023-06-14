@@ -69,10 +69,10 @@ header a {
 
 
 /* new workout form */
-label, input {
+label, input,select {
   display: block;
 }
-input {
+input,select {
   padding: 10px;
   margin-top: 10px;
   margin-bottom: 20px;
@@ -134,3 +134,10 @@ form.signup, form.login {
   background: #fff;
   border-radius: 4px;
 }
+
+
+
+/* .birthday {
+  background-image: url('https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvcm00NjdiYXRjaDUtc2NlbmUtdy0wMDJjLXgtbDBhbDBxdzEuanBn.jpg?s=gIkx56qhbaj_WIMdSEDxHsa4DdR1c-8x0fRjKsglcvE');
+} */
+

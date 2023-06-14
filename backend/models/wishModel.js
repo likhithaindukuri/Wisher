@@ -11,8 +11,8 @@ const wishSchema = new Schema({
     type: String,
     required: true
   },
-  reps: {
-    type: String,
+  date: {
+    type: Date,
     required: true
   },
   user_id:{

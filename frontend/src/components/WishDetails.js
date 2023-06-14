@@ -24,11 +24,12 @@ const WishDetails=({wish})=>{
             dispatch({type:'DELETE_WISH',payload:json})
         }
     }
+
     return (
         <div className="wish-details">
             <h4>{wish.title}</h4>
             <p><strong>Text: </strong>{wish.load}</p>
-            <p><strong>Date: </strong>{wish.reps}</p>
+            <p><strong>Date: </strong>{wish.date}</p>
             <p>{formatDistanceToNow(new Date(wish.createdAt),{addSuffix:true})}</p>
             <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
         </div>
