@@ -1,11 +1,22 @@
 import {useWishesContext} from '../hooks/useWishesContext'
+import { useAuthContext } from '../hooks/useAuthContext'
+
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const WishDetails=({wish})=>{
     const {dispatch}=useWishesContext()
+    const {user}=useAuthContext()
 
     const handleClick=async ()=>{
+
+        if(!user){
+            return
+        }
         const response=await fetch('/api/wishes/'+wish._id,{
-            method:'DELETE'
+            method:'DELETE',
+            headers:{
+                'Authorization':`Bearer ${user.token}`
+              }
         })
         const json=await response.json()
 
@@ -18,8 +29,8 @@ const WishDetails=({wish})=>{
             <h4>{wish.title}</h4>
             <p><strong>Text: </strong>{wish.load}</p>
             <p><strong>Date: </strong>{wish.reps}</p>
-            <p>{wish.createdAt}</p>
-            <span onClick={handleClick}>delete</span>
+            <p>{formatDistanceToNow(new Date(wish.createdAt),{addSuffix:true})}</p>
+            <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
         </div>
     )
 }

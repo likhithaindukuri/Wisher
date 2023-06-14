@@ -3,7 +3,9 @@ const mongoose = require('mongoose')
 
 // get all wishes
 const getWishes = async (req, res) => {
-  const wishes = await Wish.find({}).sort({createdAt: -1})
+
+  const user_id=req.user._id
+  const wishes = await Wish.find({user_id}).sort({createdAt: -1})
 
   res.status(200).json(wishes)
 }
@@ -37,13 +39,17 @@ const createWish = async (req, res) => {
   if(!load){
     emptyFields.push('load')
   }
-  if(!reps){
+  if(!reps){ 
     emptyFields.push('reps')
+  }
+  if(emptyFields.length>0){
+    return res.status(400).json({error:'Please fill in all the fields',emptyFields})
   }
 
   // add to the database
   try {
-    const wish = await Wish.create({ title, load, reps })
+    const user_id=req.user._id
+    const wish = await Wish.create({ title, load, reps,user_id })
     res.status(200).json(wish)
   } catch (error) {
     res.status(400).json({ error: error.message })

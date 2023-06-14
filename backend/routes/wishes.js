@@ -6,8 +6,11 @@ const {
   deleteWish, 
   updateWish
 } = require('../controllers/wishController')
+const requireAuth=require('../middleware/requireAuth')
 
 const router = express.Router()
+
+router.use(requireAuth)
 
 // GET all wishes
 router.get('/', getWishes)
