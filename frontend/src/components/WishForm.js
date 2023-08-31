@@ -65,7 +65,8 @@ const WishForm = () => {
   };
 
   return (
-    <form className="create" onSubmit={handleSubmit}>
+    <div className="wish-form-container">
+      <form className="create" onSubmit={handleSubmit}>
       <h3>Add a new Wish</h3>
 
       <label>Wishing Title:</label>
@@ -100,7 +101,9 @@ const WishForm = () => {
       <button>Add Wish</button>
       {error && <div className="error">{error}</div>}
     </form>
+    </div>
   );
 };
 
 export default WishForm
+

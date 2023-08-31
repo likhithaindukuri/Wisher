@@ -10,3 +10,4 @@ export const useWishesContext=()=>{
 
     return context
 }
+

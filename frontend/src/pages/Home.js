@@ -28,11 +28,11 @@ const Home = () => {
       fetchWishes()
     }
 
-  }, [dispatch])
+  }, [dispatch,user])
 
   return (
     <div className="home">
-      <div className="wishes">
+      <div className="wishes-container">
         {wishes && wishes.map(wish => (
           <WishDetails wish={wish} key={wish._id} />
         ))}
