@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const getWishes = async (req, res) => {
 
   const user_id=req.user._id
-  const wishes = await Wish.find({user_id}).sort({createdAt: -1})
+  const wishes = await Wish.find({user_id}).sort({date: 1})
 
   res.status(200).json(wishes)
 }

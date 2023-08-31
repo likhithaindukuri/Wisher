@@ -19,8 +19,12 @@ const WishForm = () => {
       setError('You must be logged in!');
       return;
     }
+    const wish = {
+      title,
+      load,
+      date: new Date(date).getTime(), // Convert date to timestamp
+    };
 
-    const wish = { title, load, date };
 
     try {
       const response = await fetch('/api/wishes', {
@@ -36,8 +40,6 @@ const WishForm = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          // Token expired, handle the error appropriately
-          // For example, redirect to the login page or prompt the user to authenticate again
           setError('Your session has expired. Please log in again.');
         } else {
           setError(json.error);
@@ -59,7 +61,6 @@ const WishForm = () => {
         dispatch({ type: 'CREATE_WISH', payload: json });
       }
     } catch (error) {
-      // Handle any other error that may occur during the API request
       setError('An error occurred while adding the wish. Please try again.');
     }
   };
