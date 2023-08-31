@@ -9,6 +9,7 @@ import WishForm from "../components/WishForm"
 const Home = () => {
   const {wishes,dispatch}=useWishesContext()
   const {user}=useAuthContext()
+  
 
   useEffect(() => {
     const fetchWishes = async () => {
@@ -20,7 +21,10 @@ const Home = () => {
       const json = await response.json()
 
       if (response.ok) {
-        dispatch({type:'SET_WISHES',payload:json})
+        const sortedWishes = json.sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+        dispatch({ type: 'SET_WISHES', payload: sortedWishes });
       }
     }
 

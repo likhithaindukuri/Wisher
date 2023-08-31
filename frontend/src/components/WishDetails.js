@@ -31,7 +31,7 @@ const WishDetails = ({ wish }) => {
       <div className="wish-details">
         <h4>{wish.title}</h4>
         <p><strong>Text: </strong>{wish.load}</p>
-        <p><strong>Date: </strong>{wish.date}</p>
+        <p><strong>Date: </strong>{new Date(wish.date).toLocaleDateString('en-GB')}</p>
         <p>{formatDistanceToNow(new Date(wish.createdAt), { addSuffix: true })}</p>
         <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
     </div>
