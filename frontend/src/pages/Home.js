@@ -34,12 +34,19 @@ const Home = () => {
 
   }, [dispatch,user])
 
+  const currentDate=new Date();
   return (
     <div className="home">
       <div className="wishes-container">
-        {wishes && wishes.map(wish => (
-          <WishDetails wish={wish} key={wish._id} />
-        ))}
+      {wishes && wishes.map(wish => {
+          const wishDate = new Date(wish.date);
+
+          if (wishDate >= currentDate) {
+            return <WishDetails wish={wish} key={wish._id} />;
+          }
+
+          return null;
+        })}
       </div>
       <WishForm/>
     </div>
