@@ -6,7 +6,7 @@ const WishForm = () => {
   const { dispatch } = useWishesContext();
   const { user } = useAuthContext();
   
-
+  const [email, setEmail] = useState('');
   const [title, setTitle] = useState('');
   const [load, setLoad] = useState('');
   const [date, setDate] = useState('');
@@ -23,9 +23,11 @@ const WishForm = () => {
     const wish = {
       title,
       load,
-      date: new Date(date).getTime(), // Convert date to timestamp
+      date: new Date(date).getTime(),
+      email,
     };
 
+    let newEmptyFields = [];
 
     try {
       const response = await fetch('/api/wishes', {
@@ -41,6 +43,7 @@ const WishForm = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
+          setEmptyFields(newEmptyFields);
           setError('Your session has expired. Please log in again.');
         } else {
           setError(json.error);
@@ -50,6 +53,7 @@ const WishForm = () => {
         setTitle('');
         setLoad('');
         setDate('');
+        setEmail('');
         setError(null);
         setEmptyFields([]);
         const formattedDate = new Date(json.date).toLocaleDateString('en-GB', {
@@ -99,7 +103,12 @@ const WishForm = () => {
         value={date}
         className={emptyFields.includes('reps') ? 'error' : ''}
       />
-
+      <label>Email:</label>
+        <input
+          type="email"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
       <button>Add Wish</button>
       {error && <div className="error">{error}</div>}
     </form>
