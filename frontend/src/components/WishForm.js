@@ -5,6 +5,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 const WishForm = () => {
   const { dispatch } = useWishesContext();
   const { user } = useAuthContext();
+  
 
   const [title, setTitle] = useState('');
   const [load, setLoad] = useState('');
