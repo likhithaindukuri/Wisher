@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useWishesContext } from '../hooks/useWishesContext';
 import { useAuthContext } from '../hooks/useAuthContext';
+import format from 'date-fns/format';
 
 const WishForm = () => {
   const { dispatch } = useWishesContext();
@@ -10,6 +11,7 @@ const WishForm = () => {
   const [title, setTitle] = useState('');
   const [load, setLoad] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
@@ -20,11 +22,13 @@ const WishForm = () => {
       setError('You must be logged in!');
       return;
     }
+    const formattedDate = format(new Date(`${date} ${time}`), 'yyyy-MM-dd HH:mm:ss');
     const wish = {
       title,
       load,
-      date: new Date(date).getTime(),
-      email,
+      date:formattedDate,
+      time,
+      email:user.email,
     };
 
     let newEmptyFields = [];
@@ -96,13 +100,22 @@ const WishForm = () => {
         value={load}
         className={emptyFields.includes('load') ? 'error' : ''}
       />
-      <label>Date:</label>
-      <input
-        type="date"
-        onChange={(e) => setDate(e.target.value)}
-        value={date}
-        className={emptyFields.includes('reps') ? 'error' : ''}
-      />
+      <div className="date-time-container">
+  <label>Date:</label>
+  <input
+    type="date"
+    onChange={(e) => setDate(e.target.value)}
+    value={date}
+    className={emptyFields.includes('reps') ? 'error' : ''}
+  />
+  <label>Time:</label>
+  <input
+    type="time"
+    onChange={(e) => setTime(e.target.value)}
+    value={time}
+    className={emptyFields.includes('time') ? 'error' : ''}
+  />
+</div>
       <label>Email:</label>
         <input
           type="email"

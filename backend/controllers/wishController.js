@@ -29,7 +29,7 @@ const getWish = async (req, res) => {
 
 // create a new wish
 const createWish = async (req, res) => {
-  const {title, load, date,email} = req.body
+  const {title, load, date,email,time} = req.body
 
   let emptyFields=[]
 
@@ -42,32 +42,22 @@ const createWish = async (req, res) => {
   if(!date){ 
     emptyFields.push('reps')
   }
+  if(!email){
+    emptyFields.push('email')
+  }
+  if(!time){
+    emptyFields.push('time')
+  }
   if(emptyFields.length>0){
     return res.status(400).json({error:'Please fill in all the fields',emptyFields})
   }
 
 
-  const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-  service: 'YourEmailServiceProvider',
-  auth: {
-    user: 'your-email@gmail.com', 
-    pass: 'your-email-password', 
-  },
-});
+  
   // add to the database
   try {
     const user_id=req.user._id
     const wish = await Wish.create({ title, load, date,user_id,email })
-
-    const mailOptions = {
-      from: 'your-email@gmail.com',
-      to: email, 
-      subject: 'New Wish Added',
-      text: `A new wish "${title}" has been added for ${date}. Message: ${load}`,
-    };
-  
-    await transporter.sendMail(mailOptions);
   
     res.status(200).json(wish)
   } catch (error) {

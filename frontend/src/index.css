@@ -143,11 +143,32 @@ form.signup, form.login {
 
 .wish-form-container {
   position: fixed;
-  top: 60%; /* Adjust this value to vertically position the form */
-  left: 80%; /* Adjust this value to horizontally position the form */
+  top: 24%; 
+  left: 80%; 
   transform: translate(-50%, -50%);
   padding: 20px;
   border-radius: 10px;
   width: 400px;
+  height: 10px;
   box-shadow: 2px 2px 5px rgba(167, 167, 167, 0.1);
 }
+
+
+
+
+.date-time-container {
+  display: flex;
+  align-items: center;
+}
+
+.date-time-container label {
+  flex: 1; 
+  margin-right: -90px; 
+}
+.date-time-container input {
+  flex: 1; 
+}
+
+
+
+

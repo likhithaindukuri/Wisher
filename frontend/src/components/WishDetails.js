@@ -3,7 +3,7 @@ import { useWishesContext } from '../hooks/useWishesContext'
 import { useAuthContext } from '../hooks/useAuthContext'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
-const WishDetails = ({ wish }) => {
+const WishDetails = ({ wish,email }) => {
   const { dispatch } = useWishesContext()
   const { user } = useAuthContext()
 
@@ -32,6 +32,7 @@ const WishDetails = ({ wish }) => {
         <h4>{wish.title}</h4>
         <p><strong>Text: </strong>{wish.load}</p>
         <p><strong>Date: </strong>{new Date(wish.date).toLocaleDateString('en-GB')}</p>
+        <p><strong>Email: </strong>{wish.email}</p>
         <p>{formatDistanceToNow(new Date(wish.createdAt), { addSuffix: true })}</p>
         <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
     </div>

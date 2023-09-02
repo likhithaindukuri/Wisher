@@ -1,3 +1,4 @@
+const { getTime } = require('date-fns')
 const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
@@ -16,6 +17,14 @@ const wishSchema = new Schema({
     required: true
   },
   user_id:{
+    type:String,
+    required:true
+  },
+  email:{
+    type:String,
+    required:true
+  },
+  time:{
     type:String,
     required:true
   }
