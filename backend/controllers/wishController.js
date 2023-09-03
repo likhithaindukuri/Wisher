@@ -29,7 +29,7 @@ const getWish = async (req, res) => {
 
 // create a new wish
 const createWish = async (req, res) => {
-  const {title, text, date,email} = req.body
+  const {title, text, date,time,email} = req.body
 
   let emptyFields=[]
 
@@ -45,6 +45,9 @@ const createWish = async (req, res) => {
   if(!email){
     emptyFields.push('email')
   }
+  if(!time){
+    emptyFields.push('time')
+  }
   
   if(emptyFields.length>0){
     return res.status(400).json({error:'Please fill in all the fields',emptyFields})
@@ -55,7 +58,7 @@ const createWish = async (req, res) => {
   // add to the database
   try {
     const user_id=req.user._id
-    const wish = await Wish.create({ title, load, date,user_id,email })
+    const wish = await Wish.create({ title, text, date,time,user_id,email })
   
     res.status(200).json(wish)
   } catch (error) {

@@ -8,7 +8,7 @@ const wishSchema = new Schema({
     type: String,
     required: true
   },
-  load: {
+  text: {
     type: String,
     required: true
   },
@@ -17,6 +17,10 @@ const wishSchema = new Schema({
     required: true
   },
   user_id:{
+    type:String,
+    required:true
+  },
+  time:{
     type:String,
     required:true
   },
