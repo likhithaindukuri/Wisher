@@ -13,20 +13,22 @@ const Home = () => {
 
   useEffect(() => {
     const fetchWishes = async () => {
-      const response = await fetch('/api/wishes',{
-        headers:{
-          'Authorization':`Bearer ${user.token}`
-        }
-      })
-      const json = await response.json()
+      if (user) {
+        const response = await fetch("/api/wishes", {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        const json = await response.json();
 
-      if (response.ok) {
-        const sortedWishes = json.sort(
-          (a, b) => new Date(a.date) - new Date(b.date)
-        );
-        dispatch({ type: 'SET_WISHES', payload: sortedWishes });
+        if (response.ok) {
+          const sortedWishes = json.sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+          );
+          dispatch({ type: "SET_WISHES", payload: sortedWishes });
+        }
       }
-    }
+    };
 
     if(user){
       fetchWishes()

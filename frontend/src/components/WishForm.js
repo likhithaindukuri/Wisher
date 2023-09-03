@@ -9,9 +9,8 @@ const WishForm = () => {
   
   const [email, setEmail] = useState('');
   const [title, setTitle] = useState('');
-  const [load, setLoad] = useState('');
+  const [text, setText] = useState('');
   const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
@@ -22,12 +21,10 @@ const WishForm = () => {
       setError('You must be logged in!');
       return;
     }
-    const formattedDate = format(new Date(`${date} ${time}`), 'yyyy-MM-dd HH:mm:ss');
     const wish = {
       title,
-      load,
-      date:formattedDate,
-      time,
+      text,
+      date,
       email:user.email,
     };
 
@@ -55,7 +52,7 @@ const WishForm = () => {
         }
       } else {
         setTitle('');
-        setLoad('');
+        setText('');
         setDate('');
         setEmail('');
         setError(null);
@@ -84,8 +81,7 @@ const WishForm = () => {
       <select
         onChange={(e) => setTitle(e.target.value)}
         value={title}
-        className={emptyFields.includes('title') ? 'error' : ''}
-      >
+        className={emptyFields.includes('title') ? 'error' : ''}>
         <option value="">Select a title</option>
         <option value="BirthDay">BirthDay</option>
         <option value="Anniversary">Anniversary</option>
@@ -96,11 +92,10 @@ const WishForm = () => {
       <label>Your message:</label>
       <input
         type="text"
-        onChange={(e) => setLoad(e.target.value)}
-        value={load}
+        onChange={(e) => setText(e.target.value)}
+        value={text}
         className={emptyFields.includes('load') ? 'error' : ''}
       />
-      <div className="date-time-container">
   <label>Date:</label>
   <input
     type="date"
@@ -108,19 +103,13 @@ const WishForm = () => {
     value={date}
     className={emptyFields.includes('reps') ? 'error' : ''}
   />
-  <label>Time:</label>
-  <input
-    type="time"
-    onChange={(e) => setTime(e.target.value)}
-    value={time}
-    className={emptyFields.includes('time') ? 'error' : ''}
-  />
-</div>
+  
+
       <label>Email:</label>
-        <input
+        <input   
           type="email"
-          onChange={(e) => setEmail(e.target.value)}
           value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       <button>Add Wish</button>
       {error && <div className="error">{error}</div>}
@@ -130,4 +119,3 @@ const WishForm = () => {
 };
 
 export default WishForm
-
