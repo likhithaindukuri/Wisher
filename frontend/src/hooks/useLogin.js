@@ -20,14 +20,15 @@ export const useLogin=()=>{
         const json=await response.json()
 
         if(!response.ok){
+            const tokenExpiration = Date.now() + json.expiresIn * 1000;
+            localStorage.setItem('token', json.token);
+            localStorage.setItem('tokenExpiration', tokenExpiration);
+            localStorage.setItem('user', JSON.stringify(json));
+            dispatch({ type: 'LOGIN', payload: json });
             setIsLoading(false)
-            setError(json.error)
         }
         if(response.ok){
-            //save the user to local storage
             localStorage.setItem('user',JSON.stringify(json))
-
-            //update the authcontext
             dispatch({type:'LOGIN',payload:json})
 
             setIsLoading(false)
