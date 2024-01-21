@@ -6,7 +6,7 @@ const WishForm = () => {
   const { dispatch } = useWishesContext();
   const { user } = useAuthContext();
   
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [date, setDate] = useState('');
@@ -26,7 +26,7 @@ const WishForm = () => {
       text,
       date,
       time,
-      email,
+      phone,
     };
 
     let newEmptyFields = [];
@@ -56,7 +56,7 @@ const WishForm = () => {
         setText('');
         setDate('');
         setTime('');
-        setEmail('');
+        setPhone('');
         setError(null);
         setEmptyFields([]);
         const formattedDate = new Date(json.date).toLocaleDateString('en-GB', {
@@ -115,12 +115,12 @@ const WishForm = () => {
         className={emptyFields.includes('time') ? 'error' : ''}
       />
       </div>
-      <label>Email:</label>
+      <label>Phone Number:</label>
         <input   
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}  
-          value={email}        
-         className={emptyFields.includes('email') ? 'error' : ''}
+          type="phone"
+          onChange={(e) => setPhone(e.target.value)}  
+          value={phone}        
+         className={emptyFields.includes('phone') ? 'error' : ''}
          />
       <button>Add Wish</button>
       {error && <div className="error">{error}</div>}

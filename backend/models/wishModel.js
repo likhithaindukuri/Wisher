@@ -24,8 +24,8 @@ const wishSchema = new Schema({
     type:String,
     required:true
   },
-  email:{
-    type:String,
+  phone:{
+    type:Number,
     required:true
   }
 }, { timestamps: true })

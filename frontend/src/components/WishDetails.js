@@ -32,7 +32,7 @@ const WishDetails = ({ wish,email }) => {
         <h4>{wish.title}</h4>
         <p><strong>Text: </strong>{wish.text}</p>
         <p><strong>Date: </strong>{new Date(wish.date).toLocaleDateString('en-GB')}</p>
-        <p><strong>Email: </strong>{wish.email}</p>
+        <p><strong>Phone: </strong>{wish.phone}</p>
         <p><strong>Time: </strong>{wish.time}</p>
         <p>{formatDistanceToNow(new Date(wish.createdAt), { addSuffix: true })}</p>
         <span className="material-symbols-outlined" onClick={handleClick}>delete</span>

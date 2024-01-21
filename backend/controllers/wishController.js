@@ -29,7 +29,7 @@ const getWish = async (req, res) => {
 
 // create a new wish
 const createWish = async (req, res) => {
-  const {title, text, date,time,email} = req.body
+  const {title, text, date,time,phone} = req.body
 
   let emptyFields=[]
 
@@ -42,8 +42,8 @@ const createWish = async (req, res) => {
   if(!date){ 
     emptyFields.push('reps')
   }
-  if(!email){
-    emptyFields.push('email')
+  if(!phone){
+    emptyFields.push('phone')
   }
   if(!time){
     emptyFields.push('time')
@@ -58,7 +58,7 @@ const createWish = async (req, res) => {
   // add to the database
   try {
     const user_id=req.user._id
-    const wish = await Wish.create({ title, text, date,time,user_id,email })
+    const wish = await Wish.create({ title, text, date,time,user_id,phone })
   
     res.status(200).json(wish)
   } catch (error) {
