@@ -1,6 +1,8 @@
 const Wish= require('../models/wishModel')
 const mongoose = require('mongoose')
 const nodemailer = require('nodemailer');
+const schedule = require('node-schedule');
+
 
 // get all wishes
 const getWishes = async (req, res) => {
@@ -67,9 +69,11 @@ const createWish = async (req, res) => {
     const user_id=req.user._id
     const wish = await Wish.create({ title, text, date,time,user_id,email})
   
-
-    // Send email to the specified recipient
-    sendEmailNotification(email, title, date, time);
+// Schedule the email at the specified date and time
+const scheduledDate = new Date(`${date}T${time}`);
+schedule.scheduleJob(scheduledDate, function () {
+  sendEmailNotification(email, title, date, time);
+});
 
     res.status(200).json(wish);
 
