@@ -1,5 +1,6 @@
 const Wish= require('../models/wishModel')
 const mongoose = require('mongoose')
+const nodemailer = require('nodemailer');
 
 // get all wishes
 const getWishes = async (req, res) => {
@@ -60,7 +61,40 @@ const createWish = async (req, res) => {
     const user_id=req.user._id
     const wish = await Wish.create({ title, text, date,time,user_id,email})
   
-    res.status(200).json(wish)
+
+    
+    // Send email to the specified recipient
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, 
+      auth: {
+        user: 'likhithaindukuri117@gmail.com',
+        pass: 'uioi jihe iygm zxgm',
+      },
+    });
+    
+    // Rest of your code remains the same
+    
+
+    const mailOptions = {
+      from: 'likhithaindukuri07@gmail.com',
+      to: email,
+      subject: 'New Wish Notification',
+      text: `Hello ${email},\n\nYou have a new wish: ${title} scheduled for ${date} at ${time}.\n\nBest regards, YourApp`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).json({ error: 'Error sending email' });
+      } else {
+        console.log('Email sent:', info.response);
+        return res.status(200).json(wish);
+      }
+    });
+
+    // res.status(200).json(wish)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

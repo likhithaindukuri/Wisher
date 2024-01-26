@@ -67,6 +67,7 @@ const WishForm = () => {
         json.date = formattedDate;
         console.log('New wish added', json);
         dispatch({ type: 'CREATE_WISH', payload: json });
+        
       }
     } catch (error) {
       setError('An error occurred while adding the wish. Please try again.');
@@ -117,7 +118,7 @@ const WishForm = () => {
       </div>
       <label>Email:</label>
         <input   
-          type="phone"
+          type="email"
           onChange={(e) => setEmail(e.target.value)}  
           value={email}        
          className={emptyFields.includes('email') ? 'error' : ''}
