@@ -81,7 +81,7 @@ const createWish = async (req, res) => {
       from: 'likhithaindukuri07@gmail.com',
       to: email,
       subject: 'New Wish Notification',
-      text: `Hello ${email},\n\nYou have a new wish: ${title} scheduled for ${date} at ${time}.\n\nBest regards, YourApp`,
+      text: `${text}`,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
