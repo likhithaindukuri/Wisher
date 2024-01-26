@@ -55,8 +55,13 @@ const createWish = async (req, res) => {
     return res.status(400).json({error:'Please fill in all the fields',emptyFields})
   }
 
+  // Check if the specified time is greater than the current time
+  const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
+  const selectedDateTime = new Date(`${date}T${time}`);
 
-  
+  if (selectedDateTime < new Date(`${date}T${currentTime}`)) {
+    return res.status(400).json({ error: 'Selected time must be greater than the current time' });
+  }
   // add to the database
   try {
     const user_id=req.user._id
