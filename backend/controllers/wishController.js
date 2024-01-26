@@ -51,6 +51,7 @@ const createWish = async (req, res) => {
   }
   
   if(emptyFields.length>0){
+    const user_id = req.user._id;
     return res.status(400).json({error:'Please fill in all the fields',emptyFields})
   }
 
@@ -62,43 +63,42 @@ const createWish = async (req, res) => {
     const wish = await Wish.create({ title, text, date,time,user_id,email})
   
 
-    
     // Send email to the specified recipient
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true, 
-      auth: {
-        user: 'likhithaindukuri117@gmail.com',
-        pass: 'uioi jihe iygm zxgm',
-      },
-    });
-    
-    // Rest of your code remains the same
-    
+    sendEmailNotification(email, title, date, time);
 
-    const mailOptions = {
-      from: 'likhithaindukuri07@gmail.com',
-      to: email,
-      subject: 'New Wish Notification',
-      text: `${text}`,
-    };
+    res.status(200).json(wish);
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-        return res.status(500).json({ error: 'Error sending email' });
-      } else {
-        console.log('Email sent:', info.response);
-        return res.status(200).json(wish);
-      }
-    });
-
-    // res.status(200).json(wish)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
 }
+
+const sendEmailNotification = (email, title, date, time) => {
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'likhithaindukuri117@gmail.com',
+      pass: 'uioi jihe iygm zxgm',
+    },
+  });
+
+  const mailOptions = {
+    from: 'likhithaindukuri07@gmail.com',
+    to: email,
+    subject: 'New Wish Notification',
+    text: ` ${text}`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
+};
 
 // delete a wish
 const deleteWish = async (req, res) => {
