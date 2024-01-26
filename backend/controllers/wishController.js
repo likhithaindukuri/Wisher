@@ -73,7 +73,7 @@ const createWish = async (req, res) => {
   }
 }
 
-const sendEmailNotification = (email, title, date, time) => {
+const sendEmailNotification = (email, text,title, date, time) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -88,7 +88,7 @@ const sendEmailNotification = (email, title, date, time) => {
     from: 'likhithaindukuri07@gmail.com',
     to: email,
     subject: 'New Wish Notification',
-    text: ` ${text}`,
+    text: text,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

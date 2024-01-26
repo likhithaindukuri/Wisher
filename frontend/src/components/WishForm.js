@@ -85,7 +85,7 @@ const WishForm = () => {
       type="title"
         onChange={(e) => setTitle(e.target.value)}
         value={title}
-        className={emptyFields.includes('title') ? 'error' : ''}>
+        className={(emptyFields ??[]).includes('title') ? 'error' : ''}>
         <option value="">Select a title</option>
         <option value="BirthDay">BirthDay</option>
         <option value="Anniversary">Anniversary</option>
@@ -98,7 +98,7 @@ const WishForm = () => {
         type="text"
         onChange={(e) => setText(e.target.value)}
         value={text}
-        className={emptyFields.includes('text') ? 'error' : ''}
+        className={(emptyFields ??[]).includes('text') ? 'error' : ''}
       />
       <div className='date-time-container'>
       <label>Date:</label>
@@ -106,14 +106,14 @@ const WishForm = () => {
         type="date"
         onChange={(e) => setDate(e.target.value)}
         value={date}
-        className={emptyFields.includes('date') ? 'error' : ''}
+        className={(emptyFields ??[]).includes('date') ? 'error' : ''}
       />
       <label>Time:</label>
       <input
         type="time"
         onChange={(e) => setTime(e.target.value)}
         value={time}
-        className={emptyFields.includes('time') ? 'error' : ''}
+        className={(emptyFields ??[]).includes('time') ? 'error' : ''}
       />
       </div>
       <label>Email:</label>
@@ -121,7 +121,7 @@ const WishForm = () => {
           type="email"
           onChange={(e) => setEmail(e.target.value)}  
           value={email}        
-         className={emptyFields.includes('email') ? 'error' : ''}
+         className={(emptyFields ??[]).includes('email') ? 'error' : ''}
          />
       <button>Add Wish</button>
       {error && <div className="error">{error}</div>}
