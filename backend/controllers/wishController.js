@@ -72,7 +72,7 @@ const createWish = async (req, res) => {
 // Schedule the email at the specified date and time
 const scheduledDate = new Date(`${date}T${time}`);
 schedule.scheduleJob(scheduledDate, function () {
-  sendEmailNotification(email, title, date, time);
+  sendEmailNotification(email,text,title, date, time);
 });
 
     res.status(200).json(wish);
@@ -97,7 +97,7 @@ const sendEmailNotification = (email, text,title, date, time) => {
     from: 'likhithaindukuri07@gmail.com',
     to: email,
     subject: 'New Wish Notification',
-    text: text,
+    text: `${text}`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
