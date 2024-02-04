@@ -14,6 +14,21 @@ const WishForm = () => {
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
+  const handleTextChange = (e) => {
+    const inputValue = e.target.value;
+
+    // Check if the input value exceeds 50 characters
+    if (inputValue.length > 40) {
+      setError('Only 40 characters allowed');
+    } else {
+      setError(null);
+    }
+
+    // Update the state
+    setText(inputValue);
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -94,12 +109,13 @@ const WishForm = () => {
         <option value="Important events">Important events</option>
       </select>
       <label>Your message:</label>
-      <input
-        type="text"
-        onChange={(e) => setText(e.target.value)}
-        value={text}
-        className={(emptyFields ??[]).includes('text') ? 'error' : ''}
-      />
+        <input
+          type="text"
+          onChange={handleTextChange}
+          value={text}
+          className={(emptyFields ?? []).includes('text') || error ? 'error' : ''}
+        />
+        {error && <div className="error">{error}</div>}
       <div className='date-time-container'>
       <label>Date:</label>
       <input

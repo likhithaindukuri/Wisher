@@ -172,7 +172,7 @@ form.signup, form.login {
 
 .wish-details:hover {
   transform: scale(0.9); 
-  transition: transform 0.4s ease; 
+  transition: transform 0.41s ease; 
 }
 
 .wish-details {
