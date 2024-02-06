@@ -172,11 +172,14 @@ form.signup, form.login {
 
 .wish-details:hover {
   transform: scale(0.9); 
-  transition: transform 0.41s ease; 
+  transition: transform 0.41s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+  
 }
 
 .wish-details {
   position: relative;
+  transition: box-shadow 0.3s;
 }
 
 .confetti-container {
