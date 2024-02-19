@@ -7,13 +7,13 @@
   --error: #f50707;
 }
 body {
-  background: #f1ebf0;
+  background: url(wall.png);
   margin: 0;
   font-family: "Poppins";
   padding-top: 150px;
 }
 header {
-  background: #f0d6e9;
+  background: #e8d6f0;
   position: fixed;
   top: 0; 
   width: 100%;
