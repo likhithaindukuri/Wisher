@@ -7,7 +7,7 @@
   --error: #f50707;
 }
 body {
-  background: url(wall.png);
+  background: #f1ebf0;
   margin: 0;
   font-family: "Poppins";
   padding-top: 150px;
@@ -74,7 +74,7 @@ header a {
 }
 
 
-/* new workout form */
+/* new wisher form */
 label, input,select {
   display: block;
 }
