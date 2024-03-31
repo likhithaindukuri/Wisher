@@ -48,3 +48,20 @@
     <img src="./frontend/public/5.png" alt="OCR" width="550"  height="250">
 </p>
 
+## Future work
+-Admin Dashboard: Develop an admin dashboard to monitor data, manage users, and detect and prevent spam or misuse of the platform.
+-Recommendation System: Integrate a recommendation system to suggest relevant wishes to users based on their preferences, history, and interactions.
+-UI/UX Refinement: Invest in UI/UX development to enhance user experience and interaction, making Wisher more intuitive and enjoyable to use.
+
+## Contributions
+- All contributions and suggestions are welcome .
+- Start with issues and for more features write to <a href ="mailto:likhithaindukuri07@gmail.com">likhithaindukuri07@gmail.com</a>
+
+
+## Website
+
+- <a href="">Wisher</a>
+
+## Licence
+- ***GNU GENERAL PUBLIC LICENSE***
+
