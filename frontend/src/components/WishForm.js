@@ -123,7 +123,7 @@ const WishForm = () => {
         onChange={(e) => setDate(e.target.value)}
         value={date}
         className={(emptyFields ??[]).includes('date') ? 'error' : ''}
-      />
+      />  
       <label>Time:</label>
       <input
         type="time"
