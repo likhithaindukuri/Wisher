@@ -1,45 +1,56 @@
-const User=require('../models/userModel')
-const jwt=require('jsonwebtoken')
+// userController.js
 
-const createToken=(_id)=>{
-    return jwt.sign({_id},process.env.SECRET,{expiresIn:'3d'})
-}
+const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
-//login user
-const loginUser=async (req,res)=>{
+const createToken = (_id) => {
+  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });
+};
 
-    const {email,password}=req.body
+// Login user
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-    try{
-        const user=await User.login(email,password)
+  try {
+    // Find user by email
+    const user = await User.findOne({ email });
 
-        //create a token
-        const token=createToken(user._id)
-
-        res.status(200).json({email,token})
+    // Check if user exists
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
-    catch(error){
-        res.status(400).json({error:error.message})
+
+    // Check if password is correct
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-}
+    // Create a token
+    const token = createToken(user._id);
 
-//signup user
-const signupUser=async (req,res)=>{
+    res.status(200).json({ email, token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-    const {email,password}=req.body
+// Signup user
+const signupUser = async (req, res) => {
+  const { email, password } = req.body;
 
-    try{
-        const user=await User.signup(email,password)
+  try {
+    const user = await User.signup(email, password);
 
-        //create a token
-        const token=createToken(user._id)
+    // Create a token
+    const token = createToken(user._id);
 
-        res.status(200).json({email,token})
-    }
-    catch(error){
-        res.status(400).json({error:error.message})
-    }
-}
+    res.status(200).json({ email, token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-module.exports={signupUser,loginUser}
+module.exports = { signupUser, loginUser };
