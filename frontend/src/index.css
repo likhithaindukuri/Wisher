@@ -193,11 +193,3 @@ form.signup, form.login {
   overflow: hidden;
 }
 
-
-.no-wishes-message {
-  font-size: 50px;
-  font-style: italic;
-  color: #e33faa;
-  text-align: center;
-  margin-top: 20px;
-}
