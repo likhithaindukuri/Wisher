@@ -43,6 +43,10 @@ const WishDetails = ({ wish,email }) => {
     }
   }
 
+  const formatTime = (time) => {
+    const [hours, minutes] = time.split(':');
+    return `${hours}:${minutes}`;
+  };
   
 
   return (
@@ -62,7 +66,7 @@ const WishDetails = ({ wish,email }) => {
         <p><strong>Text: </strong>{wish.text}</p>
         <p><strong>Date: </strong>{new Date(wish.date).toLocaleDateString('en-GB')}</p>
         <p><strong>Email: </strong>{wish.email}</p>
-        <p><strong>Time: </strong>{wish.time}</p>
+        <p><strong>Time: </strong>{formatTime(wish.time)}</p>
         <p>{formatDistanceToNow(new Date(wish.createdAt), { addSuffix: true })}</p>
         <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
     </div>
