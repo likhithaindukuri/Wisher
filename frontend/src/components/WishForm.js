@@ -64,7 +64,7 @@ const WishForm = () => {
           setError('Your session has expired. Please log in again.');
         } else {
           setError(json.error);
-          setEmptyFields(json.emptyFields);
+          setEmptyFields(json.emptyFields);     
         }
       } else {
         setTitle('');
