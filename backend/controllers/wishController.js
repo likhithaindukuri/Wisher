@@ -78,6 +78,7 @@ schedule.scheduleJob(scheduledDate, function () {
     res.status(200).json(wish);
 
   } catch (error) {
+    console.error('Error creating wish:', error);
     res.status(400).json({ error: error.message })
   }
 }

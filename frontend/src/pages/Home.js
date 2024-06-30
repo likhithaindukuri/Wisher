@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     const fetchWishes = async () => {
       if (user) {
-        const response = await fetch("/api/wishes", {
+        const response = await fetch("https://wisher-1.onrender.com/api/wishes", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
