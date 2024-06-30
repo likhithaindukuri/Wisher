@@ -44,7 +44,7 @@ const WishForm = () => {
       email,
     };
 
-    let newEmptyFields = [];
+    // let newEmptyFields = [];
 
     try {
       const response = await fetch('https://wisher-1.onrender.com/api/wishes', {
@@ -60,11 +60,12 @@ const WishForm = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setEmptyFields(newEmptyFields);
+          // setEmptyFields(newEmptyFields);
           setError('Your session has expired. Please log in again.');
         } else {
-          setError(json.error);
-          setEmptyFields(json.emptyFields);     
+          // setError(json.error);
+          // setEmptyFields(json.emptyFields);   
+          setError(json.error || 'An unknown error occurred.');  
         }
       } else {
         setTitle('');
@@ -85,6 +86,7 @@ const WishForm = () => {
         
       }
     } catch (error) {
+      console.error('Error adding wish:', error);
       setError('An error occurred while adding the wish. Please try again.');
     }
   };
