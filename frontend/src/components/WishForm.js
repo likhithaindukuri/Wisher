@@ -17,7 +17,7 @@ const WishForm = () => {
   const handleTextChange = (e) => {
     const inputValue = e.target.value;
 
-    // Check if the input value exceeds 50 characters
+    // Check if the input value exceeds 40 characters
     if (inputValue.length > 40) {
       setError('Only 40 characters allowed');
     } else {
@@ -47,7 +47,7 @@ const WishForm = () => {
     let newEmptyFields = [];
 
     try {
-      const response = await fetch('/api/wishes', {
+      const response = await fetch('https://wisher-1.onrender.com/api/wishes', {
         method: 'POST',
         body: JSON.stringify(wish),
         headers: {

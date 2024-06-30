@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Require the CORS package
+const cors = require('cors'); 
 const wishRoutes = require('./routes/wishes');
 const userRoutes = require('./routes/user');
 
@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Add CORS middleware before your routes
 app.use(cors({
-  origin: 'https://wisher-tau.vercel.app',
+  origin: ['https://wisher-tau.vercel.app','https://wisher-m7mm0h7y3-indukuri-likhithas-projects.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
