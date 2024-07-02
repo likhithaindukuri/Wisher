@@ -1,14 +1,53 @@
-const express=require('express')
+const express = require('express');
+const User = require('../models/userModel'); // Assuming you have a User model
+const jwt = require('jsonwebtoken');
+const router = express.Router();
 
-//controller functions
-const {signupUser,loginUser}=require('../controllers/userController')
+// Login endpoint
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
 
-const router=express.Router()
+  try {
+    const user = await User.findOne({ email });
 
-//login route
-router.post('/login',loginUser)
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
-//signup route
-router.post('/signup',signupUser)
+    // Verify password (assuming user has a method to compare passwords)
+    const isMatch = await user.comparePassword(password);
 
-module.exports=router
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Create JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET, { expiresIn: '1h' });
+
+    res.json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Signup endpoint
+router.post('/signup', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Create a new user
+    const user = new User({ email, password });
+    await user.save();
+
+    // Create JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET, { expiresIn: '1h' });
+
+    res.json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+module.exports = router;

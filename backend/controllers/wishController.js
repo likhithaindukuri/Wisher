@@ -61,7 +61,7 @@ const createWish = async (req, res) => {
   const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
   const selectedDateTime = new Date(`${date}T${time}`);
 
-  if (selectedDateTime < new Date(`${date}T${currentTime}`)) {
+  if (selectedDateTime <= new Date(`${date}T${currentTime}`)) {
     return res.status(400).json({ error: 'Selected time must be greater than the current time' });
   }
   // add to the database
