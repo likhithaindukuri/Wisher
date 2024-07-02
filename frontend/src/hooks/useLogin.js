@@ -30,7 +30,7 @@ export const useLogin = () => {
         dispatch({ type: 'LOGIN', payload: json });
       }
     } catch (error) {
-      console.error('Login error:', error); // Log error
+      console.error('Login error:', error); 
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);

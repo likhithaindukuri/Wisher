@@ -18,7 +18,7 @@ export const useSignup = () => {
       });
 
       const json = await response.json();
-      console.log('Signup response:', json); // Log response
+      console.log('Signup response:', json); 
 
       if (!response.ok) {
         setError(json.error || 'Signup failed. Please try again.');
@@ -30,7 +30,6 @@ export const useSignup = () => {
         dispatch({ type: 'LOGIN', payload: json });
       }
     } catch (error) {
-      console.error('Signup error:', error); // Log error
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);

@@ -30,7 +30,7 @@ const WishDetails = ({ wish,email }) => {
     if (!user) {
       return
     }
-    const response = await fetch('https://wisher-1.onrender.com/api/wishes/' + wish._id, {
+    const response = await fetch('/api/wishes/' + wish._id, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${user.token}`
