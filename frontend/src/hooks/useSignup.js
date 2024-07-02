@@ -11,7 +11,7 @@ export const useSignup=()=>{
         setError(null)
 
 
-        const response =await fetch('https://wisher-1.onrender.com/api/user/signup',{
+        const response =await fetch('/api/user/signup',{
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({email,password})
