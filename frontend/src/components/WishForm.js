@@ -47,7 +47,7 @@ const WishForm = () => {
     // let newEmptyFields = [];
 
     try {
-      const response = await fetch('/api/wishes', {
+      const response = await fetch('https://wisher-1.onrender.com/api/wishes', {
         method: 'POST',
         body: JSON.stringify(wish),
         headers: {

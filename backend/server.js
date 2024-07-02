@@ -15,7 +15,7 @@ app.use(express.json()); // Parse JSON bodies
 
 // CORS Configuration
 app.use(cors({
-  origin: 'https://wisher-tau.vercel.app', 
+  origin: '', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   credentials: true, 
 }));
