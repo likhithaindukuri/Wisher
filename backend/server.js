@@ -56,7 +56,7 @@ const requireAuth = async (req, res, next) => {
 
 // Routes
 app.use('/api/wishes', requireAuth, wishRoutes);
-app.use('/api/user', userRoutes); // Include userRoutes for login and signup
+app.use('/api/user', userRoutes); 
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {

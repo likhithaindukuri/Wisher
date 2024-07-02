@@ -1,0 +1,1 @@
+export const baseUrl=`https://wisher-1.onrender.com/`
