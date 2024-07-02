@@ -15,7 +15,7 @@ app.use(express.json()); // Parse JSON bodies
 
 // CORS Configuration
 app.use(cors({
-  origin: 'http://localhost:3000', 
+  origin: 'http://wisher-xi.vercel.app', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   credentials: true, 
 }));
