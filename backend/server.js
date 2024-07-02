@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Add CORS middleware before your routes
 app.use(cors({
-  origin: ['https://wisher-tau.vercel.app','https://wisher-m7mm0h7y3-indukuri-likhithas-projects.vercel.app'],
+  origin: 'https://wisher-tau.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
