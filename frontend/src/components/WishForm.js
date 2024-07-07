@@ -45,7 +45,7 @@ const WishForm = () => {
     };
 
     try {
-      const response = await fetch('/api/wishes', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/wishes`, {
         method: 'POST',
         body: JSON.stringify(wish),
         headers: {
