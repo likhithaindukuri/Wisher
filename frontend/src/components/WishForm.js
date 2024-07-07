@@ -82,6 +82,7 @@ const WishForm = () => {
         dispatch({ type: 'CREATE_WISH', payload: json });
       }
     } catch (error) {
+      console.error("Error during adding the wish is:",error);
       setError('An error occurred while adding the wish. Please try again.');
     }
   };

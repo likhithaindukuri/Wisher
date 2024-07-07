@@ -26,6 +26,7 @@ export const useLogin = () => {
         dispatch({ type: 'LOGIN', payload: json });
       }
     } catch (error) {
+      console.error("Error during login is:",error);
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
