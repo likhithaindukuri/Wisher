@@ -4,9 +4,17 @@ const express=require('express')
 const mongoose=require('mongoose')
 const wishRoutes=require('./routes/wishes')
 const userRoutes=require('./routes/user')
+const cors = require('cors');
 
 //express app
 const app=express()
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL, 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // Enable credentials (cookies, authorization headers, etc.)
+}));
 
 //middleware
 app.use(express.json())
