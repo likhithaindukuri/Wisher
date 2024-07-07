@@ -150,9 +150,11 @@ form.signup, form.login {
   border-radius: 10px;
   width: 400px;
   height: 10px;
-  box-shadow: 2px 2px 5px rgba(167, 167, 167, 0.1);
 }
 
+.error-active {
+  top: 65px; 
+}
 
 
 

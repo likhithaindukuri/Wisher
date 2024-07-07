@@ -15,14 +15,6 @@ app.use((req,res,next)=>{
     next()
 })
 
-// Allow requests from your frontend URL
-app.use(cors({
-    origin: 'https://wisher-frontend.onrender.com',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true, // Enable credentials (cookies, authorization headers, etc.)
-  }));
-
 //routes
 app.use('/api/wishes',wishRoutes)
 app.use('/api/user',userRoutes)

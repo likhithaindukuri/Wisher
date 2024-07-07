@@ -10,14 +10,14 @@ const WishForm = () => {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [date, setDate] = useState('');
-  const [time, setTime]=useState();
+  const [time, setTime] = useState('');
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
   const handleTextChange = (e) => {
     const inputValue = e.target.value;
 
-    // Check if the input value exceeds 50 characters
+    // Check if the input value exceeds 40 characters
     if (inputValue.length > 40) {
       setError('Only 40 characters allowed');
     } else {
@@ -28,7 +28,6 @@ const WishForm = () => {
     setText(inputValue);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,6 +35,7 @@ const WishForm = () => {
       setError('You must be logged in!');
       return;
     }
+
     const wish = {
       title,
       text,
@@ -43,8 +43,6 @@ const WishForm = () => {
       time,
       email,
     };
-
-    let newEmptyFields = [];
 
     try {
       const response = await fetch('/api/wishes', {
@@ -60,11 +58,11 @@ const WishForm = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setEmptyFields(newEmptyFields);
+          setEmptyFields([]);
           setError('Your session has expired. Please log in again.');
         } else {
           setError(json.error);
-          setEmptyFields(json.emptyFields);     
+          setEmptyFields(json.emptyFields || []);
         }
       } else {
         setTitle('');
@@ -82,7 +80,6 @@ const WishForm = () => {
         json.date = formattedDate;
         console.log('New wish added', json);
         dispatch({ type: 'CREATE_WISH', payload: json });
-        
       }
     } catch (error) {
       setError('An error occurred while adding the wish. Please try again.');
@@ -90,60 +87,62 @@ const WishForm = () => {
   };
 
   return (
-    <div className="wish-form-container">
+    <div className={`wish-form-container ${error ? 'error-active' : ''}`}>
       <form className="create" onSubmit={handleSubmit}>
-      <h3>Add a new Wish</h3>
+        <h3>Add a new Wish</h3>
 
-      <label>Wishing Title:</label>
+        <label>Wishing Title:</label>
+        <select
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+          className={(emptyFields.includes('title') || error) ? 'error' : ''}
+        >
+          <option value="">Select a title</option>
+          <option value="BirthDay">BirthDay</option>
+          <option value="Anniversary">Anniversary</option>
+          <option value="Festival">Festival</option>
+          <option value="Event">Event</option>
+          <option value="Important events">Important events</option>
+        </select>
 
-      <select
-      type="title"
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
-        className={(emptyFields ??[]).includes('title') ? 'error' : ''}>
-        <option value="">Select a title</option>
-        <option value="BirthDay">BirthDay</option>
-        <option value="Anniversary">Anniversary</option>
-        <option value="Festival">Festival</option>
-        <option value="Event">Event</option>
-        <option value="Important events">Important events</option>
-      </select>
-      <label>Your message:</label>
+        <label>Your message:</label>
         <input
           type="text"
           onChange={handleTextChange}
           value={text}
-          className={(emptyFields ?? []).includes('text') || error ? 'error' : ''}
+          className={(emptyFields.includes('text') || error) ? 'error' : ''}
         />
-        {error && <div className="error">{error}</div>}
-      <div className='date-time-container'>
-      <label>Date:</label>
-      <input
-        type="date"
-        onChange={(e) => setDate(e.target.value)}
-        value={date}
-        className={(emptyFields ??[]).includes('date') ? 'error' : ''}
-      />  
-      <label>Time:</label>
-      <input
-        type="time"
-        onChange={(e) => setTime(e.target.value)}
-        value={time}
-        className={(emptyFields ??[]).includes('time') ? 'error' : ''}
-      />
-      </div>
-      <label>Email:</label>
-        <input   
+
+        <div className='date-time-container'>
+          <label>Date:</label>
+          <input
+            type="date"
+            onChange={(e) => setDate(e.target.value)}
+            value={date}
+            className={(emptyFields.includes('date') || error) ? 'error' : ''}
+          />
+          <label>Time:</label>
+          <input
+            type="time"
+            onChange={(e) => setTime(e.target.value)}
+            value={time}
+            className={(emptyFields.includes('time') || error) ? 'error' : ''}
+          />
+        </div>
+
+        <label>Email:</label>
+        <input
           type="email"
-          onChange={(e) => setEmail(e.target.value)}  
-          value={email}        
-         className={(emptyFields ??[]).includes('email') ? 'error' : ''}
-         />
-      <button>Add Wish</button>
-      {error && <div className="error">{error}</div>}
-    </form>
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          className={(emptyFields.includes('email') || error) ? 'error' : ''}
+        />
+
+        <button>Add Wish</button>
+        {error && <div className="error">{error}</div>}
+      </form>
     </div>
   );
 };
 
-export default WishForm
+export default WishForm;
