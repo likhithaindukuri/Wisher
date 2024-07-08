@@ -6,7 +6,7 @@ const NotFound = () => {
   return (
     <div className="not-found">
       <img
-        src="/404.svg" 
+        src="/404.png" 
         alt="404 Not Found"
         style={{ width: '30%', marginTop: '50px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
       />
