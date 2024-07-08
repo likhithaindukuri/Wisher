@@ -1,60 +1,63 @@
-const Wish= require('../models/wishModel')
-const mongoose = require('mongoose')
+const Wish = require('../models/wishModel');
+const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const schedule = require('node-schedule');
 
-
-// get all wishes
+// Get all wishes
 const getWishes = async (req, res) => {
+  const user_id = req.user._id;
+  try {
+    const wishes = await Wish.find({ user_id }).sort({ date: 1 });
+    res.status(200).json(wishes);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-  const user_id=req.user._id
-  const wishes = await Wish.find({user_id}).sort({date: 1})
-
-  res.status(200).json(wishes)
-}
-
-// get a single wish
+// Get a single wish
 const getWish = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({error: 'No such wish'})
+    return res.status(404).json({ error: 'No such wish' });
   }
 
-  const wish = await Wish.findById(id)
-
-  if (!wish) {
-    return res.status(404).json({error: 'No such wish'})
+  try {
+    const wish = await Wish.findById(id);
+    if (!wish) {
+      return res.status(404).json({ error: 'No such wish' });
+    }
+    res.status(200).json(wish);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
+};
 
-  res.status(200).json(wish)
-}
-
-// create a new wish
+// Create a new wish
 const createWish = async (req, res) => {
-  const {title, text, date,time,email} = req.body
+  const { title, text, date, time, email } = req.body;
 
-  let emptyFields=[]
+  let emptyFields = [];
 
-  if(!title){
-    emptyFields.push('title')
+  if (!title) {
+    emptyFields.push('title');
   }
-  if(!text){
-    emptyFields.push('load')
+  if (!text) {
+    emptyFields.push('load');
   }
-  if(!date){ 
-    emptyFields.push('reps')
+  if (!date) {
+    emptyFields.push('reps');
   }
-  if(!email){
-    emptyFields.push('email')
+  if (!email) {
+    emptyFields.push('email');
   }
-  if(!time){
-    emptyFields.push('time')
+  if (!time) {
+    emptyFields.push('time');
   }
-  
-  if(emptyFields.length>0){
+
+  if (emptyFields.length > 0) {
     const user_id = req.user._id;
-    return res.status(400).json({error:'Please fill in all the fields',emptyFields})
+    return res.status(400).json({ error: 'Please fill in all the fields', emptyFields });
   }
 
   // Check if the specified time is greater than the current time
@@ -65,86 +68,94 @@ const createWish = async (req, res) => {
   if (selectedDateTime < new Date()) {
     return res.status(400).json({ error: 'Selected date should be greater than current date' });
   }
-  // add to the database
+
+  // Create the wish in the database
   try {
-    const user_id=req.user._id
-    const wish = await Wish.create({ title, text, date,time,user_id,email})
-  
-// Schedule the email at the specified date and time
-const scheduledDate = new Date(`${date}T${time}`);
-schedule.scheduleJob(scheduledDate, function () {
-  sendEmailNotification(email,text,title, date, time);
-});
+    const user_id = req.user._id;
+    const wish = await Wish.create({ title, text, date, time, user_id, email });
+
+    // Schedule the email at the specified date and time
+    const scheduledDate = new Date(`${date}T${time}`);
+    schedule.scheduleJob(scheduledDate, async function () {
+      try {
+        await sendEmailNotification(email, text, title, date, time);
+        console.log('Email notification sent successfully');
+      } catch (error) {
+        console.error('Error sending email notification:', error);
+      }
+    });
 
     res.status(200).json(wish);
-
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
-}
-
-const sendEmailNotification = (email, text,title, date, time) => {
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'likhithaindukuri117@gmail.com',
-      pass: 'uioi jihe iygm zxgm',
-    },
-  });
-
-  const mailOptions = {
-    from: 'likhithaindukuri07@gmail.com',
-    to: email,
-    subject: 'New Wish Notification',
-    text: `${text}`,
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email:', error);
-    } else {
-      console.log('Email sent:', info.response);
-    }
-  });
 };
 
-// delete a wish
+// Function to send email notification
+const sendEmailNotification = async (email, text, title, date, time) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'likhithaindukuri117@gmail.com',
+        pass: 'uioi jihe iygm zxgm', // Replace with your actual password or use environment variables
+      },
+    });
+
+    const mailOptions = {
+      from: 'likhithaindukuri07@gmail.com',
+      to: email,
+      subject: 'New Wish Notification',
+      text: `${text}`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent:', info.response);
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw new Error('Failed to send email notification');
+  }
+};
+
+// Delete a wish
 const deleteWish = async (req, res) => {
-    const {id}=req.params
+  const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({error: 'No such wish'})
-    }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such wish' });
+  }
 
-    const wish=await Wish.findOneAndDelete({_id:id})
-
+  try {
+    const wish = await Wish.findOneAndDelete({ _id: id });
     if (!wish) {
-        return res.status(400).json({error: 'No such wish'})
+      return res.status(400).json({ error: 'No such wish' });
     }
+    res.status(200).json(wish);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-    res.status(200).json(wish)
-}
-
-// update a wish
+// Update a wish
 const updateWish = async (req, res) => {
-    const {id}=req.params
+  const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({error: 'No such wish'})
-    }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such wish' });
+  }
 
-    const wish=await Wish.findOneAndDelete({_id:id},{
-        ...req.body
-    })
-
+  try {
+    const wish = await Wish.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
     if (!wish) {
-        return res.status(400).json({error: 'No such wish'})
+      return res.status(400).json({ error: 'No such wish' });
     }
-
-    res.status(200).json(wish)
-}
+    res.status(200).json(wish);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 module.exports = {
   getWishes,
@@ -152,5 +163,4 @@ module.exports = {
   createWish,
   deleteWish,
   updateWish,
-  createWish
-}
+};
