@@ -1,22 +1,24 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
-import NotFound from './pages/NotFound'; // Import the NotFound component
+import NotFound from './pages/NotFound';
 import { useAuthContext } from './hooks/useAuthContext';
 
 function App() {
   const { user } = useAuthContext();
+
   return (
-    <div className="App">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-slate-50 to-sky-50 text-slate-900">
       <BrowserRouter>
         <Navbar />
-        <div className="pages">
+        <main className={user ? "px-4 py-6 md:px-8 md:py-10 max-w-6xl mx-auto" : ""}>
           <Routes>
             <Route
               path="/"
-              element={user ? <Home /> : <Navigate to="/login" />}
+              element={user ? <Home /> : <Landing />}
             />
             <Route
               path="/login"
@@ -26,12 +28,9 @@ function App() {
               path="/signup"
               element={!user ? <Signup /> : <Navigate to="/" />}
             />
-            <Route
-              path="*"
-              element={<NotFound />} // Catch-all route for 404
-            />
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </div>
+        </main>
       </BrowserRouter>
     </div>
   );
