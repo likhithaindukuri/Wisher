@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { useAuthContext } from './useAuthContext';
+import { useState } from "react";
+import { useAuthContext } from "./useAuthContext";
+
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);
@@ -11,23 +13,26 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`${API_URL}/api/user/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const json = await response.json();
 
       if (!response.ok) {
-        setError(json.error || 'Login failed. Please try again.');
-      } else {
-        localStorage.setItem('user', JSON.stringify(json));
-        dispatch({ type: 'LOGIN', payload: json });
+        setError(json?.error || "Login failed. Please check your details and try again.");
+        return;
       }
-    } catch (error) {
-      console.error("Error during login is:",error);
-      setError('An error occurred. Please try again.');
+
+      localStorage.setItem("user", JSON.stringify(json));
+      dispatch({ type: "LOGIN", payload: json });
+    } catch (err) {
+      console.error("Error during login is:", err);
+      setError(
+        "Unable to reach the server. Please ensure the backend is running and try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -35,3 +40,4 @@ export const useLogin = () => {
 
   return { login, isLoading, error };
 };
+

@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { useWishesContext } from '../hooks/useWishesContext';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useWishesContext } from '../hooks/useWishesContext';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const WishForm = () => {
   const { dispatch } = useWishesContext();
@@ -45,45 +47,58 @@ const WishForm = () => {
     };
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/wishes`, {
+      const response = await fetch(`${API_URL}/api/wishes`, {
         method: 'POST',
         body: JSON.stringify(wish),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       });
 
-      const json = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      const isJson = contentType.includes('application/json');
+      const json = isJson ? await response.json() : null;
 
       if (!response.ok) {
         if (response.status === 401) {
           setEmptyFields([]);
           setError('Your session has expired. Please log in again.');
-        } else {
-          setError(json.error);
-          setEmptyFields(json.emptyFields || []);
+          return;
         }
-      } else {
-        setTitle('');
-        setText('');
-        setDate('');
-        setTime('');
-        setEmail('');
-        setError(null);
-        setEmptyFields([]);
+
+        setError(
+          json?.error ||
+          'Unable to add the wish. Please check your inputs and try again.',
+        );
+        setEmptyFields((json && json.emptyFields) || []);
+        return;
+      }
+
+      setTitle('');
+      setText('');
+      setDate('');
+      setTime('');
+      setEmail('');
+      setError(null);
+      setEmptyFields([]);
+
+      if (json?.date) {
         const formattedDate = new Date(json.date).toLocaleDateString('en-GB', {
           day: '2-digit',
           month: '2-digit',
           year: 'numeric',
         });
         json.date = formattedDate;
-        console.log('New wish added', json);
-        dispatch({ type: 'CREATE_WISH', payload: json });
       }
+
+      console.log('New wish added', json);
+      dispatch({ type: 'CREATE_WISH', payload: json });
     } catch (error) {
-      console.error("Error during adding the wish is:",error);
-      setError('An error occurred while adding the wish. Please try again.');
+      console.error('Error during adding the wish is:', error);
+      setError(
+        'An error occurred while adding the wish. Please ensure the server is running and try again.',
+      );
     }
   };
 
