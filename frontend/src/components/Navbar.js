@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
+  const [isProfileHovered, setIsProfileHovered] = useState(false);
 
   const handleClick = () => {
     logout();
+  };
+
+  const getInitials = (email) => {
+    if (!email) return "U";
+    return email.charAt(0).toUpperCase();
   };
 
   return (
@@ -29,20 +36,33 @@ const Navbar = () => {
 
         <nav className="flex items-center gap-4 text-sm font-medium text-slate-600">
           {user && (
-            <div className="flex items-center gap-4">
-              <span className="hidden text-xs text-slate-500 sm:inline">
-                Signed in as
-              </span>
-              <span className="max-w-[180px] truncate rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-800">
-                {user.email}
-              </span>
-              <button
-                type="button"
-                onClick={handleClick}
-                className="rounded-full border border-primary/70 bg-white px-4 py-1.5 text-xs font-semibold text-primary shadow-sm transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary/5 hover:text-primary hover:shadow-primary/30"
+            <div className="relative flex items-center gap-4">
+              <div
+                className="relative"
+                onMouseEnter={() => setIsProfileHovered(true)}
+                onMouseLeave={() => setIsProfileHovered(false)}
               >
-                Log out
-              </button>
+                <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-primary to-fuchsia-500 text-sm font-semibold text-white shadow-md shadow-fuchsia-300/40 transition hover:scale-110 hover:shadow-lg hover:shadow-fuchsia-400/50">
+                  {getInitials(user.email)}
+                </div>
+                {isProfileHovered && (
+                  <div className="absolute right-0 top-12 z-50 min-w-[200px] rounded-lg border border-slate-200 bg-white p-3 shadow-lg">
+                    <div className="mb-2 border-b border-slate-100 pb-2">
+                      <p className="text-xs font-medium text-slate-500">Signed in as</p>
+                      <p className="mt-1 truncate text-sm font-semibold text-slate-900">
+                        {user.email}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleClick}
+                      className="w-full rounded-md border border-primary/70 bg-white px-3 py-2 text-xs font-semibold text-primary transition hover:bg-primary/5 hover:border-primary"
+                    >
+                      Log out
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

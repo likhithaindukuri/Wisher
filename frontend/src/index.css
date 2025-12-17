@@ -5,3 +5,63 @@
 body {
   @apply bg-background text-slate-900 font-sans;
 }
+
+.confetti-container {
+  position: relative;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -40px;
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation-name: confetti-fall;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.confetti-piece:nth-child(3n) {
+  background: linear-gradient(to bottom, #ec4899, #f97316);
+}
+
+.confetti-piece:nth-child(3n + 1) {
+  background: linear-gradient(to bottom, #22c55e, #0ea5e9);
+}
+
+.confetti-piece:nth-child(3n + 2) {
+  background: linear-gradient(to bottom, #a855f7, #facc15);
+}
+
+.confetti-piece:nth-child(4n) {
+  transform: rotate(-10deg);
+}
+
+.confetti-piece:nth-child(4n + 1) {
+  transform: rotate(8deg);
+}
+
+.confetti-piece:nth-child(4n + 2) {
+  transform: rotate(-4deg);
+}
+
+.confetti-piece:nth-child(4n + 3) {
+  transform: rotate(12deg);
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}

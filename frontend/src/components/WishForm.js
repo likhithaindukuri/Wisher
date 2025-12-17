@@ -15,6 +15,7 @@ const WishForm = () => {
   const [time, setTime] = useState('');
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
+  const [showCelebrate, setShowCelebrate] = useState(false);
 
   const handleTextChange = (e) => {
     const inputValue = e.target.value;
@@ -83,16 +84,12 @@ const WishForm = () => {
       setError(null);
       setEmptyFields([]);
 
-      if (json?.date) {
-        const formattedDate = new Date(json.date).toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
-        json.date = formattedDate;
-      }
-
       dispatch({ type: "CREATE_WISH", payload: json });
+
+      setShowCelebrate(true);
+      window.setTimeout(() => {
+        setShowCelebrate(false);
+      }, 2200);
     } catch (error) {
       console.error("Error during adding the wish is:", error);
       setError(
@@ -101,9 +98,34 @@ const WishForm = () => {
     }
   };
 
+  const confettiPieces = 90;
+
   return (
     <div className="relative">
       <div className="pointer-events-none absolute inset-x-4 -top-10 h-32 rounded-full bg-primary/10 blur-3xl" />
+      {showCelebrate && (
+        <div className="pointer-events-none fixed inset-0 z-40 flex items-start justify-center overflow-hidden">
+          <div className="confetti-container mt-4 flex w-full max-w-5xl justify-between px-4">
+            {Array.from({ length: confettiPieces }).map((_, index) => {
+              const left = Math.random() * 100;
+              const delay = Math.random() * 0.6;
+              const duration = 1.8 + Math.random() * 0.8;
+
+              return (
+                <span
+                  key={index}
+                  className="confetti-piece"
+                  style={{
+                    left: `${left}%`,
+                    animationDelay: `${delay}s`,
+                    animationDuration: `${duration}s`,
+                  }}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
       <form
         className="relative space-y-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/80"
         onSubmit={handleSubmit}

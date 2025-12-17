@@ -18,7 +18,15 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={user ? <Home /> : <Landing />}
+              element={<Landing />}
+            />
+            <Route
+              path="/home"
+              element={user ? <Home /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/dashboard"
+              element={user ? <Home /> : <Navigate to="/" />}
             />
             <Route
               path="/login"

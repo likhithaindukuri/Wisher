@@ -1,44 +1,239 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useWishesContext } from "../hooks/useWishesContext";
+import WishIllustration from "../wish.png";
 
 const Landing = () => {
+  const { user } = useAuthContext();
+  const { wishes, dispatch } = useWishesContext();
+
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+
+  useEffect(() => {
+    const fetchWishes = async () => {
+      if (!user) {
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/api/wishes`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
+
+      if (response.ok) {
+        const sortedWishes = json.sort(
+          (first, second) => new Date(first.date) - new Date(second.date),
+        );
+        dispatch({ type: "SET_WISHES", payload: sortedWishes });
+      }
+    };
+
+    if (user && (!wishes || wishes.length === 0)) {
+      fetchWishes();
+    }
+  }, [dispatch, user, wishes]);
+
+  const getWishDateTime = (wish) => {
+    if (!wish?.date) {
+      return null;
+    }
+    const baseDate = new Date(wish.date);
+
+    if (Number.isNaN(baseDate.getTime())) {
+      return null;
+    }
+
+    if (wish?.time) {
+      const [hours, minutes] = wish.time.split(":");
+      baseDate.setHours(Number(hours) || 0, Number(minutes) || 0, 0, 0);
+    }
+
+    return baseDate;
+  };
+
+  const now = new Date();
+  const upcomingWishes = (wishes || []).filter((wish) => {
+    const wishDateTime = getWishDateTime(wish);
+    return wishDateTime && wishDateTime >= now;
+  });
+  const nextUpcomingWish =
+    upcomingWishes && upcomingWishes.length > 0 ? upcomingWishes[0] : null;
+
+  const wishesThisWeekCount = upcomingWishes.filter((wish) => {
+    const wishDateTime = getWishDateTime(wish);
+    if (!wishDateTime) {
+      return false;
+    }
+
+    const differenceInDays =
+      (wishDateTime.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+
+    return differenceInDays >= 0 && differenceInDays < 7;
+  }).length;
+
+  const formatDate = (value) => {
+    if (!value) {
+      return "";
+    }
+    const date = new Date(value);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+    });
+  };
+
+  const formatTime = (time) => {
+    if (!time) {
+      return "";
+    }
+    const [hours, minutes] = time.split(":");
+    return `${hours}:${minutes}`;
+  };
+
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="mx-auto max-w-5xl px-4 py-12 text-center md:py-20">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold text-primary">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-          Never miss a special moment again
-        </div>
-        <h1 className="mb-4 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl lg:text-6xl">
-          Schedule heartfelt wishes
-          <br />
-          <span className="bg-gradient-to-r from-primary to-fuchsia-500 bg-clip-text text-transparent">
-            that arrive on time
-          </span>
-        </h1>
-        <p className="mx-auto mb-8 max-w-2xl text-lg text-slate-600 md:text-xl">
-          Wisher makes it effortless to send personalized messages via email at
-          the perfect moment. Never forget a birthday, anniversary, or special
-          occasion again.
-        </p>
-        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            to="/signup"
-            className="rounded-xl bg-gradient-to-r from-primary to-fuchsia-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-300/40 transition hover:-translate-y-0.5 hover:shadow-fuchsia-400/60 md:px-8 md:py-3.5 md:text-base"
-          >
-            Get started free
-          </Link>
-          <Link
-            to="/login"
-            className="rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary md:px-8 md:py-3.5 md:text-base"
-          >
-            Log in
-          </Link>
+      <section className="relative mx-auto max-w-6xl px-4 py-12 md:py-20">
+        <div className="pointer-events-none absolute inset-x-0 -top-20 h-72 bg-gradient-to-b from-primary/10 via-fuchsia-200/10 to-transparent blur-3xl" />
+        <div className="relative grid items-center gap-10 md:grid-cols-[1.25fr,0.95fr]">
+          <div className="text-left">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold text-primary">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              Wisher · Your personal wishing assistant
+            </div>
+            <h1 className="mb-4 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl lg:text-6xl">
+              Never forget
+              <br />
+              <span className="bg-gradient-to-r from-primary via-fuchsia-500 to-sky-500 bg-clip-text text-transparent">
+                a special moment again
+              </span>
+            </h1>
+            <p className="mx-auto mb-6 max-w-xl text-sm text-slate-600 md:text-base">
+              Wisher helps you schedule heartfelt emails for birthdays,
+              anniversaries, and every celebration in between—so your wishes
+              always arrive right on time, even when life gets busy.
+            </p>
+
+            <div className="mb-6 flex flex-wrap items-center gap-4 text-xs text-slate-600">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 shadow-sm ring-1 ring-slate-200">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-fuchsia-500/20 text-[13px] text-primary">
+                  🎂
+                </span>
+                <span>Birthdays & anniversaries handled automatically</span>
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 shadow-sm ring-1 ring-slate-200">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400/10 to-sky-500/20 text-[13px] text-emerald-600">
+                  ⏰
+                </span>
+                <span>Set once, Wisher remembers for you</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+              {user ? (
+                <Link
+                  to="/home"
+                  className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary to-fuchsia-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-300/40 transition hover:-translate-y-0.5 hover:shadow-fuchsia-400/60 md:text-base"
+                >
+                  Add a new wish
+                  <span className="ml-2 text-lg leading-none">+</span>
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/signup"
+                    className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary to-fuchsia-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-300/40 transition hover:-translate-y-0.5 hover:shadow-fuchsia-400/60 md:text-base"
+                  >
+                    Get started free
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center justify-center rounded-xl border-2 border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary md:text-base"
+                  >
+                    Sign in
+                  </Link>
+                </>
+              )}
+            </div>
+
+            <p className="mt-3 text-[11px] text-slate-500">
+              No credit card required · Cancel any scheduled wish before it is
+              sent.
+            </p>
+          </div>
+
+          <div className="flex justify-center md:justify-end">
+            <div className="relative w-full max-w-md">
+              <div className="pointer-events-none absolute -left-8 -top-10 h-32 w-32 rounded-full bg-fuchsia-300/40 blur-2xl" />
+              <div className="pointer-events-none absolute -right-10 bottom-[-40px] h-40 w-40 rounded-full bg-sky-300/40 blur-3xl" />
+
+              <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-xl shadow-slate-200/80">
+                <div className="relative h-64 w-full overflow-hidden bg-slate-900/5">
+                  <img
+                    alt="Preview of scheduled birthday wishes in Wisher"
+                    className="h-full w-full object-cover"
+                    src={WishIllustration}
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent" />
+
+                  <div className="absolute inset-x-0 bottom-0 space-y-2 p-4 text-left text-[11px] text-white">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-fuchsia-200/90">
+                          {nextUpcomingWish ? "Next scheduled wish" : "Your first wish"}
+                        </p>
+                        <p className="mt-1 text-sm font-semibold">
+                          {nextUpcomingWish
+                            ? nextUpcomingWish.title || "Scheduled wish"
+                            : "See your celebrations lined up at a glance"}
+                        </p>
+                      </div>
+                      <span className="rounded-full bg-emerald-500/90 px-2.5 py-1 text-[10px] font-semibold shadow-md shadow-emerald-500/40">
+                        {wishesThisWeekCount > 0
+                          ? `${wishesThisWeekCount} ${
+                              wishesThisWeekCount === 1 ? "this week" : "this week"
+                            }`
+                          : "Get started"}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1">
+                        <span className="material-symbols-outlined text-[14px]">
+                          mail
+                        </span>
+                        <span className="truncate">
+                          {nextUpcomingWish
+                            ? nextUpcomingWish.email
+                            : "Pick who you want to surprise"}
+                        </span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1">
+                        <span className="material-symbols-outlined text-[14px]">
+                          schedule
+                        </span>
+                        <span>
+                          {nextUpcomingWish
+                            ? `${formatDate(nextUpcomingWish.date)} · ${formatTime(
+                                nextUpcomingWish.time,
+                              )}`
+                            : "Choose the perfect day & time"}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="mx-auto max-w-6xl px-4 py-12 md:py-16">
+      <section className="mx-auto max-w-6xl px-4 py-10 md:py-14">
         <div className="mb-12 text-center">
           <h2 className="mb-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
             Everything you need to stay connected
@@ -233,22 +428,34 @@ const Landing = () => {
             Ready to make someone's day?
           </h2>
           <p className="mb-8 mx-auto max-w-xl text-lg text-slate-600">
-            Join Wisher today and start scheduling heartfelt wishes that arrive
-            exactly when they're meant to.
+            {user
+              ? "Start scheduling heartfelt wishes that arrive exactly when they're meant to."
+              : "Join Wisher today and start scheduling heartfelt wishes that arrive exactly when they're meant to."}
           </p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              to="/signup"
-              className="rounded-xl bg-gradient-to-r from-primary to-fuchsia-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-fuchsia-300/40 transition hover:-translate-y-0.5 hover:shadow-fuchsia-400/60"
-            >
-              Get started free
-            </Link>
-            <Link
-              to="/login"
-              className="rounded-xl border-2 border-slate-300 bg-white px-8 py-3.5 text-base font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
-            >
-              Log in
-            </Link>
+            {user ? (
+              <Link
+                to="/home"
+                className="rounded-xl bg-gradient-to-r from-primary to-fuchsia-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-fuchsia-300/40 transition hover:-translate-y-0.5 hover:shadow-fuchsia-400/60"
+              >
+                Add Wish
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/signup"
+                  className="rounded-xl bg-gradient-to-r from-primary to-fuchsia-500 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-fuchsia-300/40 transition hover:-translate-y-0.5 hover:shadow-fuchsia-400/60"
+                >
+                  Get started free
+                </Link>
+                <Link
+                  to="/login"
+                  className="rounded-xl border-2 border-slate-300 bg-white px-8 py-3.5 text-base font-semibold text-slate-700 transition hover:border-primary hover:text-primary"
+                >
+                  Log in
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>
