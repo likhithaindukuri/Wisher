@@ -1,7 +1,7 @@
 # Wisher
 
 <p align="center">
-    <img src="./frontend/public/1.png" alt="Wisher landing page" width="550"  height="250">
+    <img src="./frontend/public/1.png?v=2" alt="Wisher landing page" width="550"  height="250">
 </p>
 
 
@@ -31,26 +31,26 @@
 ## Gallery
 
 <p align="center">
-    <img src="./frontend/public/2.png" alt="Wisher home view" width="550"  height="250">
+    <img src="./frontend/public/2.png?v=2" alt="Wisher home view" width="550"  height="250">
 </p>
 <p align="center">
-    <img src="./frontend/public/3.png" alt="Schedule wish UI" width="550"  height="250">
-</p>
-
-<p align="center">
-    <img src="./frontend/public/4.png" alt="Upcoming wishes timeline" width="550"  height="250">
+    <img src="./frontend/public/3.png?v=2" alt="Schedule wish UI" width="550"  height="250">
 </p>
 
 <p align="center">
-    <img src="./frontend/public/5.png" alt="Updated landing hero" width="550"  height="250">
+    <img src="./frontend/public/4.png?v=2" alt="Upcoming wishes timeline" width="550"  height="250">
 </p>
 
 <p align="center">
-    <img src="./frontend/public/signin.png" alt="Updated sign in page" width="550"  height="250">
+    <img src="./frontend/public/5.png?v=2" alt="Updated landing hero" width="550"  height="250">
 </p>
 
 <p align="center">
-    <img src="./frontend/public/signup.png" alt="Updated sign up page" width="550"  height="250">
+    <img src="./frontend/public/signin.png?v=2" alt="Updated sign in page" width="550"  height="250">
+</p>
+
+<p align="center">
+    <img src="./frontend/public/signup.png?v=2" alt="Updated sign up page" width="550"  height="250">
 </p>
 
 ## How It Works
