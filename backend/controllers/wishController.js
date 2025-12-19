@@ -95,17 +95,17 @@ const createWish = async (req, res) => {
 const sendEmailNotification = async (email, text, title, date, time) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '465'),
       secure: true,
       auth: {
-        user: 'likhithaindukuri117@gmail.com',
-        pass: 'uioi jihe iygm zxgm', // Replace with your actual password or use environment variables
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
 
     const mailOptions = {
-      from: 'likhithaindukuri07@gmail.com',
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: email,
       subject: 'New Wish Notification',
       text: `${text}`,
